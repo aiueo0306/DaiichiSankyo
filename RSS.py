@@ -46,6 +46,12 @@ def extract_items(page):
         try:
             # ▼ 日付の取得と整形（例: 2025年04月24日）
             date_text = row.locator("div.newsDate").inner_text().strip()
+            
+            import sys
+            sys.exit()  # 任意の場所でスクリプトを終了
+
+
+            
             pub_date = datetime.strptime(date_text, "%Y年%m月%d日").replace(tzinfo=timezone.utc)
 
             # ▼ タイトル取得

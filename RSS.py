@@ -5,7 +5,8 @@ import os
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 
 BASE_URL = "https://www.daiichisankyo.co.jp"
-DEFAULT_LINK = "https://www.daiichisankyo.co.jp/media/press_release/"  # ← 実際のURLに書き換えてください
+DEFAULT_LINK = "https://www.daiichisankyo.co.jp/media/press_release/"
+
 
 def generate_rss(items, output_path):
     fg = FeedGenerator()
@@ -30,13 +31,6 @@ def generate_rss(items, output_path):
     fg.rss_file(output_path)
     print(f"\n✅ RSSフィード生成完了！📄 保存先: {output_path}")
 
-def extract_items(page):
-    page.goto(DEFAULT_LINK, timeout=30000)
-    page.wait_for_load_state("networkidle")
-    page.wait_for_selector("div.summary-templates", timeout=10000)
-
- from datetime import datetime, timezone
-from urllib.parse import urljoin
 
 def extract_items(page):
     selector = "li"
@@ -48,7 +42,7 @@ def extract_items(page):
     for i in range(count):
         row = rows.nth(i)
         try:
-            # ▼ 日付の取得と整形（例: 2025年04月24日 → 2025-04-24）
+            # ▼ 日付の取得と整形（例: 2025年04月24日）
             date_text = row.locator("div.newsDate").inner_text().strip()
             pub_date = datetime.strptime(date_text, "%Y年%m月%d日").replace(tzinfo=timezone.utc)
 
@@ -62,12 +56,12 @@ def extract_items(page):
             else:
                 first_link = DEFAULT_LINK
 
-            # ▼ 説明（任意でカテゴリも加える）
+            # ▼ 説明（カテゴリ情報を含める）
             category = row.locator("div.newsCategory").inner_text().strip()
             description = f"{category}：{title}"
 
             items.append({
-                "title": f"{title}",
+                "title": title,
                 "link": first_link,
                 "description": description,
                 "pub_date": pub_date

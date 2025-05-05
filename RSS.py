@@ -33,7 +33,7 @@ def generate_rss(items, output_path):
 
 
 def extract_items(page):
-    selector = "div.newsListArea li"
+    selector = "li"
     rows = page.locator(selector)
     count = rows.count()
     print(f"📦 発見した更新情報行数: {count}")
@@ -49,10 +49,10 @@ def extract_items(page):
             pub_date = datetime.strptime(date_text, "%Y年%m月%d日").replace(tzinfo=timezone.utc)
 
             # ▼ タイトル取得
-            title = row.locator("div.newsTitle a").inner_text().strip()
+            title = row.locator("a").inner_text().strip()
 
             # ▼ リンク取得
-            href = row.locator("div.newsTitle a").get_attribute("href")
+            href = row.locator("a").get_attribute("href")
             if href:
                 first_link = urljoin(BASE_URL, href)
             else:

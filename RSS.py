@@ -39,7 +39,9 @@ def extract_items(page):
     print(f"📦 発見した更新情報行数: {count}")
     items = []
 
-    for i in range(count):
+
+    max_items = 10  # テスト用に制限
+    for i in range(min(count, max_items)):
         row = rows.nth(i)
         try:
             # ▼ 日付の取得と整形（例: 2025年04月24日）

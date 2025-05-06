@@ -45,7 +45,8 @@ def extract_items(page):
         row = rows.nth(i)
         try:
             # ▼ 日付の取得と整形（例: 2025年04月24日）
-            date_text = row.locator("div.newsDate").inner_text().strip()
+            date_text = row.locator("div.newsDate", has_text="年").first.inner_text(timeout=5000).strip()
+
             
             import sys
             sys.exit()  # 任意の場所でスクリプトを終了
